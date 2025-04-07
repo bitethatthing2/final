@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter as FontSans } from "next/font/google";
 import Script from "next/script"; // Import Script component
 import "./globals.css";
@@ -15,7 +15,6 @@ export const metadata: Metadata = {
   title: "Hustle Hard",
   description: "High-Energy Sports Bar • Restaurant • Nightclub",
   manifest: "/manifest.json",
-  themeColor: "#000000",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -25,6 +24,10 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     apple: "/icons/icons/icon-192x192.png",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
