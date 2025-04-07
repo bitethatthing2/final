@@ -34,6 +34,7 @@ const nextConfig: NextConfig = {
       },
     ],
     dangerouslyAllowSVG: true,
+    unoptimized: true, // Needed for static exports
   },
   async headers() {
     return [
