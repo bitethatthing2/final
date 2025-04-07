@@ -58,7 +58,7 @@
   from = "/*"
   to = "/.netlify/functions/next"
   status = 200
-  force = false
+  force = true
 
 [build.environment]
   NODE_VERSION = "20"
