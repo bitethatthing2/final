@@ -35,8 +35,6 @@ const nextConfig = {
       },
     ],
   },
-  // Required for static export
-  distDir: 'out',
   // Ensure trailing slashes are added
   trailingSlash: true,
   // Add headers for security and proper content types

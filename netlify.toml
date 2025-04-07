@@ -2,9 +2,6 @@
   command = "npm run build"
   publish = "out"
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
 # Headers to ensure proper content types and caching
 [[headers]]
   for = "/*"
