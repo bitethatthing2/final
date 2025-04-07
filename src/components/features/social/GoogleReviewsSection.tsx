@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
 import { useTheme } from '@/contexts/theme-context';
+import ElfsightWidget from '@/components/features/ElfsightWidget';
 
 const GoogleReviewsSection: React.FC = () => {
   const { theme } = useTheme();
@@ -55,12 +56,12 @@ const GoogleReviewsSection: React.FC = () => {
           
           <div className={`w-full overflow-hidden rounded-xl ${isDark ? 'border border-white/10' : 'border border-black/10'} shadow-lg`}>
             <div className={`${isDark ? 'bg-gray-900/60' : 'bg-gray-50/70'} backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-lg`}>
-              {/* Elfsight Google Reviews Widget - Follows same pattern as Instagram widget */}
+              {/* Elfsight Google Reviews Widget */}
               <div className="min-h-[500px]"> {/* Ensure widget container has height */}
-                <div 
-                  className="elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe" 
-                  data-elfsight-app-lazy
-                ></div>
+                <ElfsightWidget 
+                  widgetId="f4fdffed-81de-4d5d-b688-2da302faebbe"
+                  className="w-full h-full"
+                />
               </div>
             </div>
           </div>

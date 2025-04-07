@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Instagram } from 'lucide-react';
 import { useTheme } from '@/contexts/theme-context';
+import ElfsightWidget from '@/components/features/ElfsightWidget';
 
 const InstagramFeedSection: React.FC = () => {
   const { theme } = useTheme();
@@ -50,12 +51,12 @@ const InstagramFeedSection: React.FC = () => {
           
           <div className={`w-full overflow-hidden rounded-xl ${isDark ? 'border border-white/10' : 'border border-black/10'} shadow-lg`}>
             <div className={`${isDark ? 'bg-gray-900/60' : 'bg-gray-50/70'} backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-lg`}>
-              {/* Elfsight Instagram Feed Widget - Ensure Elfsight platform script is loaded */}
+              {/* Elfsight Instagram Feed Widget */}
               <div className="min-h-[550px] pt-6 sm:pt-0"> {/* Increased minimum height and added top padding on mobile */}
-                <div 
-                  className="elfsight-app-4118f1f5-d59f-496f-8439-e8e0232a0fef" 
-                  data-elfsight-app-lazy // Lazy load attribute
-                ></div>
+                <ElfsightWidget 
+                  widgetId="4118f1f5-d59f-496f-8439-e8e0232a0fef"
+                  className="w-full h-full"
+                />
               </div>
             </div>
           </div>
