@@ -10,6 +10,7 @@ interface ContactMethod {
   value: string;
   icon: string;
   link?: string;
+  subtext?: string;
 }
 
 const contactMethods: ContactMethod[] = [
@@ -21,14 +22,16 @@ const contactMethods: ContactMethod[] = [
   },
   {
     title: "Phone",
-    value: "(555) 123-4567",
+    value: "(503) 391-9977",
     icon: "📞",
-    link: "tel:+15551234567"
+    link: "tel:+15033919977"
   },
   {
     title: "Address",
-    value: "123 Main Street, Portland, OR 97201",
-    icon: "📍"
+    value: "145 Liberty St NE Suite #101, Salem, OR 97301",
+    icon: "📍",
+    link: "https://maps.google.com/?q=145+Liberty+St+NE+Suite+101+Salem+OR+97301",
+    subtext: "Order online: order.online"
   }
 ];
 
@@ -61,6 +64,11 @@ export default function ContactPage() {
                 ) : (
                   <p className="text-gray-400 dark:text-gray-600">
                     {method.value}
+                  </p>
+                )}
+                {method.subtext && (
+                  <p className="text-gray-400 dark:text-gray-600 mt-2 text-sm">
+                    {method.subtext}
                   </p>
                 )}
               </div>
@@ -123,9 +131,13 @@ export default function ContactPage() {
               </h2>
               <div className="space-y-3">
                 {[
-                  { day: "Monday - Friday", hours: "7:00 AM - 8:00 PM" },
-                  { day: "Saturday", hours: "8:00 AM - 9:00 PM" },
-                  { day: "Sunday", hours: "8:00 AM - 7:00 PM" }
+                  { day: "Monday", hours: "10:00 AM - 11:00 PM" },
+                  { day: "Tuesday", hours: "10:00 AM - 11:00 PM" },
+                  { day: "Wednesday", hours: "10:00 AM - 11:00 PM" },
+                  { day: "Thursday", hours: "10:00 AM - 12:00 AM" },
+                  { day: "Friday", hours: "10:00 AM - 2:00 AM" },
+                  { day: "Saturday", hours: "10:00 AM - 2:00 AM" },
+                  { day: "Sunday", hours: "10:00 AM - 11:00 PM" }
                 ].map((schedule) => (
                   <div 
                     key={schedule.day}
