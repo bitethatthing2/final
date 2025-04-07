@@ -1,3 +1,6 @@
+git add package.json package-lock.json
+git commit -m "fix: add cmdk dependency"
+git push origin main
 # Updating Supabase RLS Policies
 
 Since we're having issues with the automated script, you can update the RLS policies manually through the Supabase Dashboard.

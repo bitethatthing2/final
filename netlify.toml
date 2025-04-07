@@ -16,14 +16,27 @@
     Permissions-Policy = "interest-cohort=()"
 
 [[headers]]
-  for = "/_next/static/*"
+  for = "/only_these/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "/static/*"
+  for = "/only_these/logos/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/png"
+
+[[headers]]
+  for = "/only_these/ios/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/png"
+
+[[headers]]
+  for = "/only_these/android/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/png"
 
 [[headers]]
   for = "/*.png"
@@ -37,6 +50,16 @@
     Content-Type = "image/x-icon"
 
 # Redirects for PWA assets
+[[redirects]]
+  from = "/only_these/*"
+  to = "/only_these/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/only_these/logos/*"
+  to = "/only_these/logos/:splat"
+  status = 200
+
 [[redirects]]
   from = "/manifest.json"
   to = "/manifest.json"
@@ -53,16 +76,15 @@
   to = "/static/:splat"
   status = 200
 
-# Fallback for SPA
+# Fallback
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/next"
+  to = "/index.html"
   status = 200
-  force = true
 
 [build.environment]
-  NODE_VERSION = "20"
-  NPM_VERSION = "10"
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
   NEXT_USE_NETLIFY_EDGE = "true"
   NEXT_PUBLIC_FIREBASE_API_KEY = "AIzaSyB0Nxf3pvW32KBc0D1o2-K6qIeKovhGWfg"
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN = "new1-f04b3.firebaseapp.com"
@@ -77,4 +99,4 @@
   # These need to be set in Netlify UI environment variables
   # FIREBASE_PROJECT_ID
   # FIREBASE_CLIENT_EMAIL
-  # FIREBASE_PRIVATE_KEY
+  # FIREBASE_PRIVATE_KEY 
