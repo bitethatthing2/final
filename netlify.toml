@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build && node scripts/prepare-netlify.js"
+  command = "npm run build"
   publish = ".next"
 
 [[plugins]]
@@ -74,12 +74,6 @@
 [[redirects]]
   from = "/static/*"
   to = "/static/:splat"
-  status = 200
-
-# Fallback
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
   status = 200
 
 [build.environment]
