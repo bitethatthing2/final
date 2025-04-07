@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { menuData } from "@/lib/menu-data"
 import { BackButton } from "@/components/ui/back-button"
@@ -15,7 +15,7 @@ import { Card } from "@/components/ui/card"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 
-export default function OrderPage() {
+function OrderPageContent() {
   const { theme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [tableId, setTableId] = useState<string | null>(null)
@@ -257,5 +257,13 @@ export default function OrderPage() {
         )}
       </div>
     </div>
-  )
+  );
+}
+
+export default function OrderPage() {
+  return (
+    <Suspense fallback={<div>Loading order options...</div>}> 
+      <OrderPageContent />
+    </Suspense>
+  );
 }
