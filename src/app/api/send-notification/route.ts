@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { getMessaging } from "firebase-admin/messaging";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
-import { getActiveSubscriptions } from "@/lib/supabase";
-import { createPlatformPayloads } from "@/lib/router";
 
 // Initialize Firebase Admin
 const apps = getApps();
@@ -95,70 +93,70 @@ export async function POST(request: Request) {
     };
 
     // Get platform-specific payloads using our router utility
-    const { android: androidPayload, ios: iosPayload, web: webPayload } = 
-      createPlatformPayloads(basePayload, token);
+    // const { android: androidPayload, ios: iosPayload, web: webPayload } = 
+    //   createPlatformPayloads(basePayload, token);
 
     // Send to all registered devices
     if (sendToAll) {
       try {
         // Get all active subscriptions from Supabase
-        const subscriptions = await getActiveSubscriptions();
+        // const subscriptions = await getActiveSubscriptions();
         
-        if (subscriptions.length === 0) {
-          return NextResponse.json(
-            { error: "No active subscriptions found" },
-            { status: 404 }
-          );
-        }
+        // if (subscriptions.length === 0) {
+        //   return NextResponse.json(
+        //     { error: "No active subscriptions found" },
+        //     { status: 404 }
+        //   );
+        // }
 
-        console.log(`Sending notifications to ${subscriptions.length} devices`);
+        console.log(`Sending notifications to devices`);
         
         // Send to each device with platform detection
-        for (const subscription of subscriptions) {
-          const deviceToken = subscription.endpoint;
-          const userAgent = subscription.user_agent.toLowerCase();
+        // for (const subscription of subscriptions) {
+        //   const deviceToken = subscription.endpoint;
+        //   const userAgent = subscription.user_agent.toLowerCase();
           
-          // Determine platform based on user agent
-          let devicePlatform = "web"; // Default to web
-          if (userAgent.includes("android")) {
-            devicePlatform = "android";
-          } else if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
-            devicePlatform = "ios";
-          }
+        //   // Determine platform based on user agent
+        //   let devicePlatform = "web"; // Default to web
+        //   if (userAgent.includes("android")) {
+        //     devicePlatform = "android";
+        //   } else if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
+        //     devicePlatform = "ios";
+        //   }
           
-          // Skip if we're targeting a specific platform and this device doesn't match
-          if (platform !== "all" && platform !== devicePlatform) {
-            continue;
-          }
+        //   // Skip if we're targeting a specific platform and this device doesn't match
+        //   if (platform !== "all" && platform !== devicePlatform) {
+        //     continue;
+        //   }
           
-          try {
-            if (devicePlatform === "android") {
-              await messaging.send({...androidPayload, token: deviceToken});
-            } else if (devicePlatform === "ios") {
-              await messaging.send({...iosPayload, token: deviceToken});
-            } else {
-              await messaging.send({...webPayload, token: deviceToken});
-            }
+        //   try {
+        //     if (devicePlatform === "android") {
+        //       await messaging.send({...androidPayload, token: deviceToken});
+        //     } else if (devicePlatform === "ios") {
+        //       await messaging.send({...iosPayload, token: deviceToken});
+        //     } else {
+        //       await messaging.send({...webPayload, token: deviceToken});
+        //     }
             
-            results.sent++;
-            results.details.push({ 
-              token: deviceToken.substring(0, 10) + "...", 
-              platform: devicePlatform,
-              status: "success" 
-            });
-          } catch (error: any) {
-            results.failed++;
-            results.details.push({ 
-              token: deviceToken.substring(0, 10) + "...", 
-              platform: devicePlatform,
-              status: "failed",
-              error: error.message 
-            });
-          }
-        }
+        //     results.sent++;
+        //     results.details.push({ 
+        //       token: deviceToken.substring(0, 10) + "...", 
+        //       platform: devicePlatform,
+        //       status: "success" 
+        //     });
+        //   } catch (error: any) {
+        //     results.failed++;
+        //     results.details.push({ 
+        //       token: deviceToken.substring(0, 10) + "...", 
+        //       platform: devicePlatform,
+        //       status: "failed",
+        //       error: error.message 
+        //     });
+        //   }
+        // }
         
-        results.success = results.sent > 0;
-        return NextResponse.json(results);
+        // results.success = results.sent > 0;
+        // return NextResponse.json(results);
       } catch (error: any) {
         console.error("Error sending to all devices:", error);
         return NextResponse.json(
@@ -172,63 +170,63 @@ export async function POST(request: Request) {
     if (platform === "all") {
       // Try sending to all platforms for this token
       try {
-        await messaging.send({...androidPayload, token});
-        results.sent++;
-        results.details.push({ platform: "android", status: "success" });
+        // await messaging.send({...androidPayload, token});
+        // results.sent++;
+        // results.details.push({ platform: "android", status: "success" });
       } catch (error: any) {
-        results.failed++;
-        results.details.push({ 
-          platform: "android", 
-          status: "failed",
-          error: error.message 
-        });
+        // results.failed++;
+        // results.details.push({ 
+        //   platform: "android", 
+        //   status: "failed",
+        //   error: error.message 
+        // });
       }
       
       try {
-        await messaging.send({...iosPayload, token});
-        results.sent++;
-        results.details.push({ platform: "ios", status: "success" });
+        // await messaging.send({...iosPayload, token});
+        // results.sent++;
+        // results.details.push({ platform: "ios", status: "success" });
       } catch (error: any) {
-        results.failed++;
-        results.details.push({ 
-          platform: "ios", 
-          status: "failed",
-          error: error.message 
-        });
+        // results.failed++;
+        // results.details.push({ 
+        //   platform: "ios", 
+        //   status: "failed",
+        //   error: error.message 
+        // });
       }
       
       try {
-        await messaging.send({...webPayload, token});
-        results.sent++;
-        results.details.push({ platform: "web", status: "success" });
+        // await messaging.send({...webPayload, token});
+        // results.sent++;
+        // results.details.push({ platform: "web", status: "success" });
       } catch (error: any) {
-        results.failed++;
-        results.details.push({ 
-          platform: "web", 
-          status: "failed",
-          error: error.message 
-        });
+        // results.failed++;
+        // results.details.push({ 
+        //   platform: "web", 
+        //   status: "failed",
+        //   error: error.message 
+        // });
       }
       
-      results.success = results.sent > 0;
-      return NextResponse.json(results);
+      // results.success = results.sent > 0;
+      // return NextResponse.json(results);
     } else {
       // Send to specific platform
       try {
-        let response;
-        if (platform === "android") {
-          response = await messaging.send({...androidPayload, token});
-        } else if (platform === "ios") {
-          response = await messaging.send({...iosPayload, token});
-        } else {
-          // Default to web
-          response = await messaging.send({...webPayload, token});
-        }
+        // let response;
+        // if (platform === "android") {
+        //   response = await messaging.send({...androidPayload, token});
+        // } else if (platform === "ios") {
+        //   response = await messaging.send({...iosPayload, token});
+        // } else {
+        //   // Default to web
+        //   response = await messaging.send({...webPayload, token});
+        // }
         
-        results.sent = 1;
-        results.success = true;
-        results.details.push({ platform, status: "success" });
-        return NextResponse.json(results);
+        // results.sent = 1;
+        // results.success = true;
+        // results.details.push({ platform, status: "success" });
+        // return NextResponse.json(results);
       } catch (error: any) {
         console.error(`Error sending to ${platform}:`, error);
         return NextResponse.json(
