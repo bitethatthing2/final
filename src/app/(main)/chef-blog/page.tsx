@@ -82,7 +82,7 @@ export default function ChefBlogPage() {
     <div className="min-h-screen bg-white dark:bg-black">
       <div className="container py-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-black dark:text-white">Chef Becky's Blog</h1>
+          <h1 className="text-4xl font-bold mb-2 text-black dark:text-white">Sabores de México</h1>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Authentic Mexican recipes, cooking techniques, and culinary secrets from Side Hustle Bar's Executive Chef Rebeckah Sanchez. Bring the flavors of Mexico to your home kitchen with these tried-and-true recipes.
           </p>
