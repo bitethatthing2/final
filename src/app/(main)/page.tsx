@@ -114,14 +114,30 @@ export default function HomePage() {
               className={`h-12 w-full max-w-[160px] text-sm sm:text-base font-semibold rounded-full transition-all flex items-center justify-center gap-2 ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'} border border-transparent hover:border-current shadow-md hover:shadow-lg transform hover:scale-105`}
               onClick={() => window.location.href = '/order?mode=online'}
             >
-              <ShoppingBag className={`w-3 h-3 ${theme === 'dark' ? 'text-black' : 'text-white'}`} />
+              <div className="w-5 h-5 relative">
+                <Image 
+                  src={theme === 'dark' ? "/order-online-icon-light.png" : "/order-online-icon-dark.png"}
+                  alt="Delivery"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
+              </div>
               <span>Delivery</span>
             </Button>
             <Button 
               className={`h-12 w-full max-w-[160px] text-sm sm:text-base font-semibold rounded-full transition-all flex items-center justify-center gap-2 ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'} border border-transparent hover:border-current shadow-md hover:shadow-lg transform hover:scale-105`}
               onClick={() => window.location.href = '/order?mode=pickup'}
             >
-              <Store className={`w-3 h-3 ${theme === 'dark' ? 'text-black' : 'text-white'}`} />
+              <div className="w-5 h-5 relative">
+                <Image 
+                  src={theme === 'dark' ? "/order-online-icon-light.png" : "/order-online-icon-dark.png"}
+                  alt="Pickup"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
+              </div>
               <span>Pickup</span>
             </Button>
           </div>

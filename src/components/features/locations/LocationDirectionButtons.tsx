@@ -24,7 +24,7 @@ const LocationDirectionButtons: React.FC<LocationDirectionButtonsProps> = ({
           className="flex items-center gap-2 bg-black border-black text-white hover:bg-black/90 hover:text-white px-6 py-3"
         >
           <Link href={portlandDirectionsUrl} target="_blank" rel="noopener noreferrer">
-            <MapPin className="w-4 h-4" />
+            <MapPin className="w-2 h-2" />
             <span>Directions to Portland</span>
           </Link>
         </Button>
@@ -37,7 +37,7 @@ const LocationDirectionButtons: React.FC<LocationDirectionButtonsProps> = ({
           className="flex items-center gap-2 bg-black border-black text-white hover:bg-black/90 hover:text-white px-6 py-3"
         >
           <Link href={salemDirectionsUrl} target="_blank" rel="noopener noreferrer">
-            <MapPin className="w-4 h-4" />
+            <MapPin className="w-2 h-2" />
             <span>Directions to Salem</span>
           </Link>
         </Button>
