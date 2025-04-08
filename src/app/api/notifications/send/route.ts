@@ -20,7 +20,6 @@ if (!apps.length) {
           projectId: process.env.PROJECT_ID,
           clientEmail: process.env.client_email,
           privateKey: privateKey,
-          privateKeyId: process.env.PRIVATE_KEY_ID,
         }),
         storageBucket: process.env.STORAGE_BUCKET,
       });
