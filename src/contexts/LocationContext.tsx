@@ -44,7 +44,7 @@ export const defaultLocationData = {
       Friday: "10 AM - 2:30 AM",
       Saturday: "10 AM - 2:30 AM"
     },
-    embedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2795.930311185878!2d-122.6788063!3d45.5196783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950a0688b1627d%3A0xb04e56408f27d08e!2s327%20SW%20Morrison%20St%2C%20Portland%2C%20OR%2097204!5e0!3m2!1sen!2sus!4v1678886400001!5m2!1sen!2sus"
+    embedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d719332.6607707763!2d-123.46261295315917!3d45.22972793451698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1744138010374!5m2!1sen!2sus"
   },
   salem: {
     name: "The Side Hustle Bar - Salem",
