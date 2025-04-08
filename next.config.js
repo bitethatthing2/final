@@ -52,6 +52,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true, // Required for static export
     dangerouslyAllowSVG: true,
     remotePatterns: [
       {
@@ -110,7 +111,9 @@ const nextConfig = {
     }
     
     return config;
-  }
+  },
+  // Use static export for Netlify
+  output: 'export',
 };
 
 module.exports = withPWA(nextConfig);

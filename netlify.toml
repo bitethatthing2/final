@@ -1,9 +1,6 @@
 [build]
   command = "npm run build"
-  publish = ".next"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+  publish = "out"
 
 # Headers to ensure proper content types and caching
 [[headers]]
@@ -79,9 +76,8 @@
 # SPA fallback - important for client-side routing
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/next"
+  to = "/index.html"
   status = 200
-  force = false
 
 [build.environment]
   NODE_VERSION = "18"
