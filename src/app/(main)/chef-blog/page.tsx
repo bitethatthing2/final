@@ -21,7 +21,7 @@ const blogPosts: BlogPost[] = [
     excerpt: "Learn the secrets to making perfect, authentic Mexican flour tortillas from scratch with Chef Becky's traditional family recipe.",
     content: "Growing up in a traditional Mexican household, I learned that the foundation of any great Mexican meal starts with the perfect tortilla. Today, I'm sharing my family's treasured flour tortilla recipe that has been passed down through generations. The key to authentic tortillas isn't just in the ingredients, but in the technique...",
     date: "April 7, 2025",
-    image: "/loaded_nacho.png",
+    image: "/flour-tortillas-at-home-blog-image.png",
     author: "Chef Rebeckah Sanchez",
     category: "Traditional Recipes"
   },
@@ -31,7 +31,7 @@ const blogPosts: BlogPost[] = [
     excerpt: "Master the art of making restaurant-quality Birria Tacos with Chef Becky's step-by-step instructions and secret techniques.",
     content: "Birria tacos have taken social media by storm, and for good reason! This traditional dish from Jalisco, Mexico features tender, slow-cooked meat infused with a rich, flavorful consommé. The secret to truly exceptional birria is in the marinade and cooking method...",
     date: "March 30, 2025",
-    image: "/basket_fry.png",
+    image: "/tacos-barria-blog-image.png",
     author: "Chef Rebeckah Sanchez",
     category: "Trending Recipes"
   },
@@ -41,7 +41,7 @@ const blogPosts: BlogPost[] = [
     excerpt: "Chef Becky reveals the professional techniques and ingredients that make authentic Mexican cuisine so irresistible.",
     content: "After years in professional kitchens and learning from my family's culinary traditions, I've gathered cooking secrets that transform ordinary Mexican dishes into extraordinary culinary experiences. From using the right chiles to mastering the perfect salsa, these techniques will elevate your home cooking...",
     date: "March 22, 2025",
-    image: "/chips_guac.png",
+    image: "/secrets-mexican-chef-blog.png",
     author: "Chef Rebeckah Sanchez",
     category: "Chef Tips"
   },
@@ -51,7 +51,7 @@ const blogPosts: BlogPost[] = [
     excerpt: "Discover how to make restaurant-quality salsa verde at home with Chef Becky's authentic techniques and ingredient tips.",
     content: "A great salsa verde can transform any Mexican dish from good to unforgettable. In this guide, I'll walk you through creating the perfect balance of tangy tomatillos, spicy chiles, and aromatic cilantro. The secret lies in roasting the ingredients to bring out their complex flavors...",
     date: "March 15, 2025",
-    image: "/flautas_potatoes.png",
+    image: "/perfect-salsa-verde-blog.png",
     author: "Chef Rebeckah Sanchez",
     category: "Sauces & Condiments"
   },
@@ -61,7 +61,7 @@ const blogPosts: BlogPost[] = [
     excerpt: "Learn how to recreate the irresistible flavors of authentic Mexican street corn with Chef Becky's insider techniques.",
     content: "Elote, or Mexican street corn, is a perfect example of how simple ingredients can create an explosion of flavor. The combination of sweet corn, tangy lime, creamy mayo, salty cotija cheese, and spicy chile powder creates a harmony of flavors that's impossible to resist...",
     date: "March 8, 2025",
-    image: "/loaded_frys.png",
+    image: "/make-elote-at-home-blog-image.png",
     author: "Chef Rebeckah Sanchez",
     category: "Street Food Favorites"
   },
@@ -71,7 +71,7 @@ const blogPosts: BlogPost[] = [
     excerpt: "Elevate your guacamole game with Chef Becky's authentic techniques and ingredient selection secrets.",
     content: "Great guacamole is about more than just mashing avocados. It's about understanding the perfect balance of ingredients, the right technique for texture, and knowing when to serve it. In this guide, I'll share my professional secrets for creating guacamole that will impress even the most discerning Mexican food enthusiasts...",
     date: "March 1, 2025",
-    image: "/basket_tots.png",
+    image: "/guacamole-blog-image.png",
     author: "Chef Rebeckah Sanchez",
     category: "Essential Techniques"
   }
