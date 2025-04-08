@@ -11,7 +11,7 @@ interface LocationSwitcherProps {
 }
 
 export function LocationSwitcher({ className }: LocationSwitcherProps) {
-  const { setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const { selectedLocation, setSelectedLocation } = useLocation()
   
@@ -26,8 +26,19 @@ export function LocationSwitcher({ className }: LocationSwitcherProps) {
     salem: '/wolf-icon-black.png'
   }
   
+  // If not mounted yet, return a placeholder to prevent layout shift
+  if (!mounted) {
+    return <div className={`flex flex-col items-center space-y-4 ${className}`}>
+      <div className="mt-6 flex justify-center items-center">
+        <div className="relative w-96 h-96 opacity-0">
+          Loading...
+        </div>
+      </div>
+    </div>
+  }
+  
   // Get current image based on location
-  const currentImage = mounted ? locationImages[selectedLocation] : ''
+  const currentImage = locationImages[selectedLocation]
   
   const toggleLocation = () => {
     const newLocation = selectedLocation === 'portland' ? 'salem' : 'portland'
@@ -36,8 +47,6 @@ export function LocationSwitcher({ className }: LocationSwitcherProps) {
     // Toggle theme when location changes
     setTheme(newLocation === 'portland' ? 'dark' : 'light')
   }
-  
-  if (!mounted) return null
   
   return (
     <div className={`flex flex-col items-center space-y-4 ${className}`}>
@@ -96,22 +105,20 @@ export function LocationSwitcher({ className }: LocationSwitcherProps) {
               translateX: selectedLocation === 'salem' ? '1.5rem' : '0.25rem',
               scale: selectedLocation === 'salem' ? 1.1 : 1
             }}
-            className={`inline-block h-7 w-7 rounded-full bg-white dark:bg-white flex items-center justify-center`}
+            className="flex h-7 w-7 rounded-full bg-white dark:bg-white items-center justify-center"
           >
-            {mounted && (
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Image
-                  src={'/wolf-icon-black.png'}
-                  alt="Location Toggle Icon"
-                  width={20} 
-                  height={20}
-                  className="object-contain w-full h-full" 
-                />
-              </motion.div>
-            )}
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Image
+                src={'/wolf-icon-black.png'}
+                alt="Location Toggle Icon"
+                width={20} 
+                height={20}
+                className="object-contain w-full h-full" 
+              />
+            </motion.div>
           </motion.span>
         </motion.button>
         

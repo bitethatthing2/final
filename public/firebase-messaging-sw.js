@@ -1,105 +1,100 @@
 /* eslint-disable no-restricted-globals */
 
-import { initializeApp } from "firebase/app";
-import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
+// Firebase Service Worker for Background Push Notifications
 
-// **IMPORTANT**: Config is injected during the build process
-// by next.config.ts into self.__FIREBASE_CONFIG__
+// Skip waiting to ensure the latest service worker is activated
+self.addEventListener('install', function(event) {
+  self.skipWaiting();
+});
 
-// For debugging
-const SW_VERSION = '1.0.1'; // Incremented version
-console.log(`[SW v${SW_VERSION}] Service Worker starting... Attempting to read config.`);
+// Basic Firebase app configuration
+// Note: This is a minimal config needed for FCM in the service worker
+// The actual config should match your Firebase project
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY", // Will be replaced at runtime with injected config
+  projectId: "YOUR_PROJECT_ID",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID",
+};
 
-// Ensure the config object exists before proceeding
-if (typeof self === 'undefined' || !(self as any).__FIREBASE_CONFIG__) {
-  console.error(`[SW v${SW_VERSION}] Firebase config (self.__FIREBASE_CONFIG__) not found. SW cannot initialize.`);
-} else {
-  // Read the injected config
-  const firebaseConfig = (self as any).__FIREBASE_CONFIG__;
-  console.log(`[SW v${SW_VERSION}] Firebase config loaded from injection:`, firebaseConfig ? 'Config Present' : 'Config Missing/Invalid');
+// Service worker version for debugging
+const SW_VERSION = '1.0.2';
+console.log(`[Firebase SW v${SW_VERSION}] Service Worker initializing...`);
 
-  try {
-    // Initialize the Firebase app in the service worker using injected config
-    const app = initializeApp(firebaseConfig);
-    console.log(`[SW v${SW_VERSION}] Firebase app initialized in SW.`);
+// Load Firebase scripts dynamically
+importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js');
 
-    const messaging = getMessaging(app);
-    console.log(`[SW v${SW_VERSION}] Firebase Messaging instance obtained in SW.`);
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
 
-    // Background message handler
-    onBackgroundMessage(messaging, (payload) => {
-      console.log(`[SW v${SW_VERSION}] Received background message:`, payload);
+// Handle background messages
+messaging.onBackgroundMessage(function(payload) {
+  console.log('[Firebase SW] Received background message:', payload);
 
-      // Customize notification here
-      const notificationTitle = payload.notification?.title || payload.data?.title || "New Hustle Hard Update";
-      const notificationOptions = {
-        body: payload.notification?.body || payload.data?.body || "Check it out!",
-        // Use a standard icon from your manifest
-        icon: '/icons/icon-192x192.png',
-        badge: '/icons/icon-192x192.png', // Optional: badge for Android
-        tag: payload.collapseKey || payload.messageId || Date.now().toString(), // Helps grouping/replacing notifications
-        data: {
-          url: payload.fcmOptions?.link || payload.data?.link || '/', // Default link
-          swVersion: SW_VERSION
-        },
-        // Add other options as needed (e.g., actions, image)
-        // image: payload.data?.image,
-        // actions: [
-        //   { action: 'open_url', title: 'Open' },
-        // ],
-      };
+  // Customize notification based on payload
+  const notificationTitle = payload.notification?.title || "Hustle Hard Update";
+  const notificationOptions = {
+    body: payload.notification?.body || "Check out what's new!",
+    icon: '/icons/icons/icon-192x192.png',
+    badge: '/icons/icons/icon-72x72.png',
+    tag: payload.data?.tag || 'hustle-hard-notification',
+    data: {
+      url: payload.data?.url || '/',
+      timestamp: Date.now(),
+      swVersion: SW_VERSION
+    },
+    actions: [
+      {
+        action: 'view',
+        title: 'View Details',
+      },
+    ],
+  };
 
-      console.log(`[SW v${SW_VERSION}] Showing notification with title: "${notificationTitle}" and options:`, notificationOptions);
+  // Show the notification
+  return self.registration.showNotification(notificationTitle, notificationOptions);
+});
 
-      // Use self.registration (service worker's registration property)
-      if (self.registration) {
-         self.registration.showNotification(notificationTitle, notificationOptions)
-           .then(() => console.log(`[SW v${SW_VERSION}] Notification shown successfully.`))
-           .catch(err => console.error(`[SW v${SW_VERSION}] Error showing notification:`, err));
-      } else {
-        console.error(`[SW v${SW_VERSION}] self.registration is not available. Cannot show notification.`);
-      }
-    });
-
-    console.log(`[SW v${SW_VERSION}] Background message handler set up.`);
-
-  } catch (error) {
-    console.error(`[SW v${SW_VERSION}] Error initializing Firebase in SW:`, error);
-    // Log the config that caused the error if possible
-    console.error(`[SW v${SW_VERSION}] Config used:`, firebaseConfig);
+// Handle notification click
+self.addEventListener('notificationclick', function(event) {
+  console.log('[Firebase SW] Notification clicked:', event);
+  
+  // Close the notification
+  event.notification.close();
+  
+  // Get the notification data
+  const notificationData = event.notification.data;
+  
+  // Handle action clicks
+  if (event.action === 'view') {
+    // Custom action handling
+    console.log('[Firebase SW] "View Details" action clicked');
   }
-}
-
-// Handle notification click event
-self.addEventListener('notificationclick', (event) => {
-  console.log(`[SW v${SW_VERSION}] Notification clicked:`, event.notification);
-  event.notification.close(); // Close the notification
-
-  // Get the URL from the notification data
-  const urlToOpen = event.notification.data?.url || '/';
-  console.log(`[SW v${SW_VERSION}] Attempting to open URL: ${urlToOpen}`);
-
-  // Open the app or specific URL
+  
+  // This will open the app and navigate to the URL specified in the notification
+  const urlToOpen = notificationData?.url || '/';
+  
+  // Open or focus the client
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
-      // Check if there's already a tab open with the target URL
-      for (let i = 0; i < windowClients.length; i++) {
-        const client = windowClients[i];
-        // Use startsWith for broader matching if needed (e.g., ignore query params)
-        if (client.url === urlToOpen && 'focus' in client) {
-          console.log(`[SW v${SW_VERSION}] Found existing client, focusing...`);
-          return client.focus();
+    clients.matchAll({type: 'window'}).then(function(clientList) {
+      // If a window client is already open, focus it
+      for (let i = 0; i < clientList.length; i++) {
+        const client = clientList[i];
+        if (client.url.startsWith(self.location.origin) && 'focus' in client) {
+          client.focus();
+          if ('navigate' in client) {
+            client.navigate(urlToOpen);
+            return;
+          }
         }
       }
-      // If no existing tab, open a new one
+      
+      // If no window client is open, open a new one
       if (clients.openWindow) {
-        console.log(`[SW v${SW_VERSION}] No existing client found, opening new window...`);
         return clients.openWindow(urlToOpen);
       }
-    }).catch(err => {
-      console.error(`[SW v${SW_VERSION}] Error handling notification click:`, err);
     })
   );
 });
-
-console.log(`[SW v${SW_VERSION}] Service Worker script fully executed.`);

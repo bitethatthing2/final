@@ -1,9 +1,16 @@
 /** @type {import('next').NextConfig} */
-const withPWA = require('next-pwa')({
+const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
   register: true,
   skipWaiting: true,
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+  swcMinify: true,
+  workboxOptions: {
+    disableDevLogs: true,
+  },
 });
 
 const nextConfig = {
@@ -48,7 +55,7 @@ const nextConfig = {
   // Ensure trailing slashes are added
   trailingSlash: true,
   // Add webpack configuration if needed
-  webpack(config, { isServer }) {
+  webpack(config, { isServer, webpack }) {
     // Inject Firebase config into service worker
     if (!isServer) {
       // Create a stringified version of the Firebase config for injection
@@ -64,7 +71,7 @@ const nextConfig = {
 
       // Add a plugin to inject the Firebase config into the service worker
       config.plugins.push(
-        new config.webpack.DefinePlugin({
+        new webpack.DefinePlugin({
           'self.__FIREBASE_CONFIG__': JSON.stringify(firebaseConfig),
         })
       );

@@ -1,5 +1,5 @@
 git add package.json package-lock.json
-git commit -m "fix: add cmdk dependency"
+git commit -m "fix: add  dependency"
 git push origin main
 # Updating Supabase RLS Policies
 

@@ -4,14 +4,15 @@ import Image from 'next/image';
 import { useLocation } from '@/contexts/LocationContext';
 import { MapPin, Phone, Mail, Instagram, Facebook, Clock, ArrowUp, ShoppingCart, Calendar, Users, UtensilsCrossed, Download, Bell, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useTheme } from '@/contexts/theme-context';
+import { useTheme } from 'next-themes';
+import { useHydration } from '@/hooks/use-hydration';
 
 export default function DynamicFooter() {
-  const { theme } = useTheme(); // Get current theme
+  const { resolvedTheme } = useTheme(); // Use resolvedTheme instead of theme
   const { selectedLocation, locationData } = useLocation();
   const currentLocation = locationData[selectedLocation];
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const isHydrated = useHydration();
   
   // Add scroll to top functionality
   useEffect(() => {
@@ -20,7 +21,6 @@ export default function DynamicFooter() {
     };
     
     window.addEventListener('scroll', checkScroll);
-    setMounted(true); // Mark component as mounted
     return () => window.removeEventListener('scroll', checkScroll);
   }, []);
   
@@ -34,11 +34,20 @@ export default function DynamicFooter() {
   // Format phone number for tel: link
   const formattedPhone = currentLocation.phone.replace(/\D/g, '');
   
-  // If not mounted yet, return null to avoid flash of unstyled content
-  if (!mounted) return null;
+  // If not hydrated yet, return a placeholder to prevent layout shift
+  if (!isHydrated) {
+    return (
+      <section className="w-full bg-white dark:bg-gray-950/90 relative">
+        <div className="container mx-auto py-12 px-8">
+          {/* Placeholder content with same structure but no theme-dependent elements */}
+          <div className="opacity-0">Loading footer...</div>
+        </div>
+      </section>
+    );
+  }
   
   // Determine color scheme based on current theme
-  const isDark = theme === 'dark';
+  const isDark = resolvedTheme === 'dark';
   
   return (
     <section className={`w-full ${isDark ? 'bg-gray-950/90' : 'bg-white'} relative`}>
