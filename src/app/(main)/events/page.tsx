@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 
 interface Event {
@@ -66,6 +64,7 @@ export default function EventsPage() {
                       src={event.image}
                       alt={event.title}
                       fill
+                      unoptimized
                       className="object-cover rounded"
                     />
                   </div>
