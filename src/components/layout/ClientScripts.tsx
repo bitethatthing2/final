@@ -5,7 +5,12 @@ import Script from "next/script";
 export default function ClientScripts() {
   return (
     <>
-      {/* Add Animation Frame Fix Script - must be first */}
+      {/* Add Direct Animation Fix Script - highest priority */}
+      <Script 
+        src="/direct-animation-fix.js"
+        strategy="beforeInteractive"
+      />
+      {/* Add Animation Frame Fix Script */}
       <Script 
         src="/animation-frame-fix.js"
         strategy="beforeInteractive"
