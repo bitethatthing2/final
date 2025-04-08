@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { NotificationManager } from '@/components/features/notifications/NotificationManager';
+import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -9,6 +9,12 @@ import { testNotificationSetup } from '@/lib/supabase/notification-service';
 import { supabase } from '@/lib/supabase/client';
 import { AlertCircle, CheckCircle2, BellIcon } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
+// Dynamically import the NotificationManager component to prevent static rendering issues
+const NotificationManager = dynamic(
+  () => import('@/components/features/notifications/NotificationManager'),
+  { ssr: false }
+);
 
 export default function NotificationSettingsPage() {
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
