@@ -33,7 +33,7 @@ export default function AndroidInstructionsPage() {
                 </div>
                 <div className="relative w-full sm:w-1/2 h-auto rounded-lg overflow-hidden border border-white/10 shadow-lg">
                   <Image 
-                    src="/only_these/android_pwa_install.png" 
+                    src="/android_installation_guide-black.png" 
                     alt="Android Installation Guide" 
                     width={300} 
                     height={600}

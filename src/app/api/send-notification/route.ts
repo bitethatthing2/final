@@ -2,28 +2,6 @@ import { NextResponse } from "next/server";
 import { getMessaging } from "firebase-admin/messaging";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 
-// Initialize Firebase Admin
-const apps = getApps();
-
-if (!apps.length) {
-  // Handle the private key properly for Netlify
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY 
-    ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n") 
-    : undefined;
-
-  try {
-    initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: privateKey,
-      }),
-    });
-  } catch (error) {
-    console.error("Firebase Admin initialization error:", error);
-  }
-}
-
 // Define result types
 type NotificationResult = {
   success: boolean;
@@ -38,6 +16,39 @@ type NotificationResult = {
 };
 
 export async function POST(request: Request) {
+  // --- Initialize Firebase Admin SDK within the handler ---
+  if (!getApps().length) {
+    const privateKey = process.env.FIREBASE_PRIVATE_KEY
+      ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
+      : undefined;
+
+    if (!privateKey || !process.env.FIREBASE_PROJECT_ID || !process.env.FIREBASE_CLIENT_EMAIL) {
+      console.error("Firebase Admin SDK credentials not available during API call.");
+      return NextResponse.json(
+        { error: "Server configuration error: Firebase Admin credentials missing." },
+        { status: 500 }
+      );
+    }
+
+    try {
+      initializeApp({
+        credential: cert({
+          projectId: process.env.FIREBASE_PROJECT_ID,
+          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+          privateKey: privateKey,
+        }),
+      });
+      console.log("Firebase Admin initialized within POST handler.");
+    } catch (error) {
+      console.error("Firebase Admin initialization error within POST handler:", error);
+      return NextResponse.json(
+        { error: "Server configuration error: Failed to initialize Firebase Admin." },
+        { status: 500 }
+      );
+    }
+  }
+  // --- End Firebase Admin Initialization ---
+
   try {
     const { token, title, message, link, platform, sendToAll = false } = await request.json();
 

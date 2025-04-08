@@ -2,40 +2,50 @@
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Ensure environment variables are loaded (e.g., in .env.local)
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_PROJECT_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.anon_key || '';
+let supabaseInstance: SupabaseClient | null = null;
 
-let supabase: SupabaseClient | null = null;
-
-if (supabaseUrl && supabaseAnonKey) {
-    try {
-        // Create the Supabase client instance
-        supabase = createClient(supabaseUrl, supabaseAnonKey, {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-            },
-            global: {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${supabaseAnonKey}`
-                },
-            },
-        });
-        console.log("Supabase client initialized successfully.");
-    } catch (error) {
-        console.error("Supabase client initialization error:", error);
+export function getSupabaseClient(): SupabaseClient {
+    // Return existing instance if already created (singleton pattern)
+    if (supabaseInstance) {
+        return supabaseInstance;
     }
 
-} else {
-    console.warn(
-        "Supabase URL or Anon Key is missing in environment variables. Supabase client not initialized. Check SUPABASE_PROJECT_URL and anon_key."
-    );
+    // Get Supabase credentials from environment variables
+    // Use NEXT_PUBLIC_ prefix for variables needed client-side
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    // Check if environment variables are set
+    if (!supabaseUrl || !supabaseAnonKey) {
+        // Throw an error if called without necessary env vars
+        // This check happens when getSupabaseClient is called, not on module import
+        throw new Error("Supabase URL or Anon Key is missing in environment variables. Cannot create Supabase client.");
+    }
+
+    // Try to create the Supabase client instance
+    try {
+        supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
+            auth: {
+                persistSession: true, // Recommended for client-side
+                autoRefreshToken: true,
+                // detectSessionInUrl: false, // Set based on your auth flow needs
+            },
+            // global: { // Global headers usually not needed for standard client usage
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            // },
+        });
+
+        console.log("Supabase client initialized successfully via getSupabaseClient().");
+        return supabaseInstance;
+
+    } catch (error) {
+        console.error("Supabase client initialization error:", error);
+        // Re-throw or handle the error appropriately
+        throw new Error("Failed to initialize Supabase client.");
+    }
 }
 
-// Export the initialized client (or null if initialization failed)
-export { supabase };
-
-// Export default client as well for potential convenience
-export default supabase;
+// Note: We no longer export the potentially null 'supabase' variable directly.
+// Consumers should import and call getSupabaseClient().

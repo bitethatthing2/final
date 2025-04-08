@@ -1,6 +1,4 @@
-"use client"
-
-import { Header } from "@/components/header";
+import PageHeader from "@/components/layout/PageHeader";
 import DynamicFooter from "@/components/layout/DynamicFooter";
 
 export default function MainLayout({
@@ -10,7 +8,7 @@ export default function MainLayout({
 }) {
   return (
     <>
-      <Header />
+      <PageHeader title="Hustle Hard" />
       <main className="flex-grow">
         {children}
       </main>

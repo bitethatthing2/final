@@ -1,11 +1,7 @@
-import React from 'react';
-import { Metadata } from 'next';
-import PageHeader from '@/components/common/PageHeader';
+"use client";
 
-export const metadata: Metadata = {
-  title: 'Order Online | Hustle Hard',
-  description: 'Order your favorite food from Hustle Hard online for pickup or delivery.',
-};
+import React from 'react';
+import PageHeader from '@/components/common/PageHeader';
 
 export default function OrderPage() {
   return (

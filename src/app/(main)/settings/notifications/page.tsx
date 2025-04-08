@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { testNotificationSetup } from '@/lib/supabase/notification-service';
-import { supabase } from '@/lib/supabase/client';
+import { getSupabaseClient } from '@/lib/supabase/client';
 import { AlertCircle, CheckCircle2, BellIcon } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Dynamically import the NotificationManager component to prevent static rendering issues
 const NotificationManager = dynamic(
@@ -19,8 +20,15 @@ const NotificationManager = dynamic(
 export default function NotificationSettingsPage() {
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [testMessage, setTestMessage] = useState<string>('');
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Set mounted to true only on the client-side
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const testConnection = async () => {
+    const supabase = getSupabaseClient();
     if (!supabase) {
       setTestStatus('error');
       setTestMessage('Supabase client not initialized. Check your environment variables.');
@@ -47,6 +55,41 @@ export default function NotificationSettingsPage() {
     }
   };
 
+  // Render skeleton or null if not mounted yet
+  if (!isMounted) {
+    return (
+      <div className="container max-w-4xl py-10">
+        <div className="flex items-center gap-2 mb-6">
+          <BellIcon className="h-6 w-6" />
+          <Skeleton className="h-8 w-64" /> 
+        </div>
+        <Skeleton className="h-4 w-full mb-8" /> 
+        <div className="grid gap-8">
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-48 mb-2" /> 
+              <Skeleton className="h-4 w-full" /> 
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-10 w-32" /> 
+            </CardContent>
+          </Card>
+          <Separator />
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-48 mb-2" />
+              <Skeleton className="h-4 w-full" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-10 w-32" />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Render the actual content only when mounted
   return (
     <div className="container max-w-4xl py-10">
       <div className="flex items-center gap-2 mb-6">

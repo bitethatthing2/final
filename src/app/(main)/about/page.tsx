@@ -1,5 +1,8 @@
+"use client";
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { defaultLocationData } from '@/contexts/LocationContext';
 
 interface TeamMember {
   name: string;
@@ -102,20 +105,24 @@ export default function AboutPage() {
             <div className="bg-black dark:bg-white rounded-lg p-6">
               <h3 className="text-xl font-bold text-white dark:text-black mb-2">Salem</h3>
               <p className="text-gray-400 dark:text-gray-600 mb-4">
-                Our original location in downtown Salem features a sleek interior, full bar, and our complete menu of Mexican-inspired dishes. Visit us at 145 Liberty St NE Suite #101, Salem, OR 97301.
+                Our original location in downtown Salem features a sleek interior, full bar, and our complete menu of Mexican-inspired dishes.
               </p>
-              <Link href="/locations" className="text-white dark:text-black underline">
-                View Details
-              </Link>
+              <div className="mt-4">
+                <Link href="/locations" className="text-primary hover:underline">
+                  View Location Details
+                </Link>
+              </div>
             </div>
             <div className="bg-black dark:bg-white rounded-lg p-6">
               <h3 className="text-xl font-bold text-white dark:text-black mb-2">Portland</h3>
               <p className="text-gray-400 dark:text-gray-600 mb-4">
                 Our newest location brings the Side Hustle experience to Portland with the same high-energy atmosphere, exceptional food, and unforgettable events that made our Salem location famous.
               </p>
-              <Link href="/locations" className="text-white dark:text-black underline">
-                View Details
-              </Link>
+              <div className="mt-4">
+                <Link href="/locations" className="text-primary hover:underline">
+                  View Location Details
+                </Link>
+              </div>
             </div>
           </div>
         </div>

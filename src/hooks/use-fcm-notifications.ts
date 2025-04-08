@@ -7,7 +7,7 @@ import {
   registerForPushNotifications, 
   unregisterFromPushNotifications 
 } from '@/lib/supabase/notification-service';
-import { supabase } from '@/lib/supabase/client';
+import { getSupabaseClient } from '@/lib/supabase/client';
 
 /**
  * Hook to manage Firebase Cloud Messaging (FCM) notifications
@@ -72,17 +72,9 @@ export const useFcmNotifications = () => {
     setIsRegistering(true);
     
     try {
-      // Check if Supabase client is initialized
-      if (!supabase) {
-        toast({
-          title: "Supabase Error",
-          description: "Database connection not initialized. Please try again later.",
-          variant: "destructive",
-        });
-        setIsRegistering(false);
-        return false;
-      }
-      
+      // Initialize Supabase client when needed
+      const supabase = getSupabaseClient();
+
       // Check if notifications are supported
       if (!('Notification' in window)) {
         toast({
@@ -165,15 +157,9 @@ export const useFcmNotifications = () => {
 
   // Unregister from push notifications
   const unregisterFromNotifications = useCallback(async () => {
-    if (!supabase) {
-      toast({
-        title: "Supabase Error",
-        description: "Database connection not initialized. Please try again later.",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
+    // Initialize Supabase client when needed
+    const supabase = getSupabaseClient();
+
     if (!fcmToken) {
       console.log('No FCM token to unregister');
       return false;

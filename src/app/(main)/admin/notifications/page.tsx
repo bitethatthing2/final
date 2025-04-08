@@ -5,7 +5,7 @@ import { NotificationTester } from '@/components/features/notifications/Notifica
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getActiveSubscriptions } from '@/lib/supabase/notification-service';
-import { supabase } from '@/lib/supabase/client';
+import { getSupabaseClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, Users, BellRing } from 'lucide-react';
 
@@ -15,6 +15,8 @@ export default function AdminNotificationsPage() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchSubscriptions = async () => {
+    const supabase = getSupabaseClient();
+
     if (!supabase) {
       setError('Supabase client not initialized');
       return;

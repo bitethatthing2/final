@@ -3,35 +3,7 @@ import { getMessaging } from "firebase-admin/messaging";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getActiveSubscriptions } from "@/lib/supabase/notification-service";
 import { createPlatformPayloads } from "@/lib/utils/notification-routing";
-import { supabase } from "@/lib/supabase/client";
-
-// Initialize Firebase Admin
-const apps = getApps();
-
-if (!apps.length) {
-  try {
-    // Check if we have service account credentials
-    if (process.env.PRIVATE_KEY && process.env.PROJECT_ID && process.env.client_email) {
-      // Use service account credentials from environment variables
-      const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
-      
-      initializeApp({
-        credential: cert({
-          projectId: process.env.PROJECT_ID,
-          clientEmail: process.env.client_email,
-          privateKey: privateKey,
-        }),
-        storageBucket: process.env.STORAGE_BUCKET,
-      });
-      console.log("Firebase Admin initialized with environment variables");
-    } else {
-      console.error("Firebase Admin SDK credentials not available");
-      console.log("Please set the required environment variables: PRIVATE_KEY, PROJECT_ID, client_email");
-    }
-  } catch (error) {
-    console.error("Firebase Admin initialization error:", error);
-  }
-}
+import { getSupabaseClient } from "@/lib/supabase/client";
 
 // Define result types
 type NotificationResult = {
@@ -47,6 +19,38 @@ type NotificationResult = {
 };
 
 export async function POST(request: Request) {
+  // --- Initialize Firebase Admin SDK within the handler ---
+  if (!getApps().length) {
+    try {
+      if (process.env.PRIVATE_KEY && process.env.PROJECT_ID && process.env.client_email) {
+        const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
+        initializeApp({
+          credential: cert({
+            projectId: process.env.PROJECT_ID,
+            clientEmail: process.env.client_email,
+            privateKey: privateKey,
+          }),
+          storageBucket: process.env.STORAGE_BUCKET,
+        });
+        console.log("Firebase Admin initialized within POST handler.");
+      } else {
+        console.error("Firebase Admin SDK credentials not available during API call.");
+        // Return an error immediately if creds are missing when the API is called
+        return NextResponse.json(
+          { error: "Server configuration error: Firebase Admin credentials missing." },
+          { status: 500 }
+        );
+      }
+    } catch (error) {
+      console.error("Firebase Admin initialization error within POST handler:", error);
+      return NextResponse.json(
+        { error: "Server configuration error: Failed to initialize Firebase Admin." },
+        { status: 500 }
+      );
+    }
+  }
+  // --- End Firebase Admin Initialization ---
+
   try {
     const { token, title, message, link, platform, sendToAll = false } = await request.json();
 
@@ -86,20 +90,15 @@ export async function POST(request: Request) {
       });
     }
 
-    // Check if Firebase Admin is initialized
-    if (getApps().length === 0) {
-      return NextResponse.json(
-        { error: "Firebase Admin is not initialized. Check server logs for details." },
-        { status: 500 }
-      );
-    }
-
     // Check if Supabase client is initialized (for sendToAll)
-    if (sendToAll && !supabase) {
-      return NextResponse.json(
-        { error: "Supabase client is not initialized. Check environment variables." },
-        { status: 500 }
-      );
+    if (sendToAll) {
+      const supabase = getSupabaseClient();
+      if (!supabase) {
+        return NextResponse.json(
+          { error: "Supabase client is not initialized. Check environment variables." },
+          { status: 500 }
+        );
+      }
     }
 
     const messaging = getMessaging();
@@ -124,6 +123,7 @@ export async function POST(request: Request) {
     if (sendToAll) {
       try {
         // Get all active subscriptions from Supabase
+        const supabase = getSupabaseClient();
         const subscriptions = await getActiveSubscriptions(supabase);
         
         if (subscriptions.length === 0) {

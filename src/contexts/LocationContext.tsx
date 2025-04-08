@@ -27,7 +27,7 @@ interface LocationContextType {
   };
 }
 
-const defaultLocationData = {
+export const defaultLocationData = {
   portland: {
     name: "The Side Hustle Bar - Portland",
     description: "Our original location in downtown Portland. Come enjoy our famous tacos, craft cocktails, and vibrant nightlife atmosphere.",
@@ -49,7 +49,7 @@ const defaultLocationData = {
   salem: {
     name: "The Side Hustle Bar - Salem",
     description: "Margaritas and Mexican fare round out the menu at this high-energy sports bar and nightclub.",
-    address: "145 Liberty St NE Suite #101, Salem, OR 97301",
+    address: "145 Liberty St NE Suite &#35;101, Salem, OR 97301",
     phone: "(503) 391-9977",
     email: "contact@thesidehustlesalem.com",
     serviceOptions: ["Dine-in", "Takeout", "Full Bar", "Has outdoor seating", "Serves great cocktails", "Has dancing"],
