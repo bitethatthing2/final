@@ -10,6 +10,39 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   swcMinify: true,
   workboxOptions: {
     disableDevLogs: true,
+    // Exclude problematic files from precaching
+    exclude: [
+      /_redirects/,
+      /\.map$/,
+      /^manifest.*\.js$/,
+      /\.DS_Store/,
+      /\.git/
+    ],
+    // Define custom runtime caching rules similar to your previous project
+    runtimeCaching: [
+      {
+        urlPattern: /^https:\/\/magnificent-churros-3c51ed\.netlify\.app\/.*$/,
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'app-cache',
+          expiration: {
+            maxEntries: 200,
+            maxAgeSeconds: 86400 // 1 day
+          }
+        }
+      },
+      {
+        urlPattern: /\.(png|jpg|jpeg|svg|gif|ico)$/,
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'image-cache',
+          expiration: {
+            maxEntries: 50,
+            maxAgeSeconds: 604800 // 1 week
+          }
+        }
+      }
+    ]
   },
 });
 

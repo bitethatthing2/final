@@ -3,13 +3,13 @@ import { getMessaging, getToken, isSupported, onMessage, MessagePayload } from "
 
 // **IMPORTANT**: Load Firebase config from environment variables
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || process.env.apiKey,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || process.env.authDomain,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || process.env.MESSAGING_SENDER_ID || process.env.SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || process.env.appId,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || process.env.MEASURMENT_ID,
 };
 
 // Helper function to check if device is iOS
@@ -68,12 +68,12 @@ export const fetchToken = async (swRegistration: ServiceWorkerRegistration | nul
     if (fcmMessaging && swRegistration) { // Ensure we have registration from PWA setup
       console.log(`[Client v${CLIENT_VERSION}] Messaging initialized, fetching token...`);
 
-      const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY;
+      const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY || process.env.VAPID_PUBLIC_KEY;
 
       console.log(`[Client v${CLIENT_VERSION}] Using VAPID key:`, vapidKey ? "[KEY_PRESENT]" : "[KEY_MISSING]");
 
       if (!vapidKey) {
-        console.error('VAPID key (NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY) is missing in environment variables.');
+        console.error('VAPID key (NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY or VAPID_PUBLIC_KEY) is missing in environment variables.');
         return null;
       }
 

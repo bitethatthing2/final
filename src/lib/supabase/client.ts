@@ -3,15 +3,26 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // Ensure environment variables are loaded (e.g., in .env.local)
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_PROJECT_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.anon_key || '';
 
 let supabase: SupabaseClient | null = null;
 
 if (supabaseUrl && supabaseAnonKey) {
     try {
         // Create the Supabase client instance
-        supabase = createClient(supabaseUrl, supabaseAnonKey);
+        supabase = createClient(supabaseUrl, supabaseAnonKey, {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+            },
+            global: {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${supabaseAnonKey}`
+                },
+            },
+        });
         console.log("Supabase client initialized successfully.");
     } catch (error) {
         console.error("Supabase client initialization error:", error);
@@ -19,7 +30,7 @@ if (supabaseUrl && supabaseAnonKey) {
 
 } else {
     console.warn(
-        "Supabase URL or Anon Key is missing in environment variables. Supabase client not initialized. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY."
+        "Supabase URL or Anon Key is missing in environment variables. Supabase client not initialized. Check SUPABASE_PROJECT_URL and anon_key."
     );
 }
 
