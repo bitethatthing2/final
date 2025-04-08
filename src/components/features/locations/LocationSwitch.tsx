@@ -58,11 +58,13 @@ const LocationSwitch: React.FC<LocationSwitchProps> = ({ className }) => {
       <div className="w-full max-w-4xl mx-auto mb-6">
         {selectedLocation === 'portland' ? (
           <PortlandMap 
+            key={`portland-map-${isMounted ? 'mounted' : 'loading'}`}
             embedUrl={activeLocationData.embedUrl}
             title={`${activeLocationData.name} Location Map`}
           />
         ) : (
           <SalemMap 
+            key={`salem-map-${isMounted ? 'mounted' : 'loading'}`}
             embedUrl={activeLocationData.embedUrl}
             title={`${activeLocationData.name} Location Map`}
           />

@@ -23,6 +23,7 @@ const GoogleMapEmbed: React.FC<GoogleMapEmbedProps> = ({
           title={title}
           width="100%"
           height="100%"
+          loading="lazy"
           allowFullScreen={true}
           referrerPolicy="no-referrer-when-downgrade"
           className={cn("absolute top-0 left-0 w-full h-full border-0", className)}

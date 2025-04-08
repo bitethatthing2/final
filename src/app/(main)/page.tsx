@@ -152,6 +152,7 @@ export default function HomePage() {
         {selectedLocation === 'portland' ? (
           <>
             <PortlandMap 
+              key={`home-portland-map-${mounted ? 'mounted' : 'loading'}`}
               embedUrl={locationData.portland.embedUrl} 
               title={locationData.portland.name} 
             />
@@ -162,6 +163,7 @@ export default function HomePage() {
         ) : (
           <>
             <SalemMap 
+              key={`home-salem-map-${mounted ? 'mounted' : 'loading'}`}
               embedUrl={locationData.salem.embedUrl} 
               title={locationData.salem.name} 
             />

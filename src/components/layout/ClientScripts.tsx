@@ -10,6 +10,14 @@ export default function ClientScripts() {
         src="/elfsight-fix.js"
         strategy="beforeInteractive"
       />
+      {/* Add Google Maps Fix Script */}
+      <Script 
+        src="/google-maps-fix.js"
+        strategy="afterInteractive"
+        onError={() => {
+          console.error('Failed to load Google Maps fix script');
+        }}
+      />
       {/* Add Elfsight Platform Script */}
       <Script 
         src="https://static.elfsight.com/platform/platform.js" 
