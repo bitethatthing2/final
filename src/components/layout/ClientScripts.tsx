@@ -5,6 +5,12 @@ import Script from "next/script";
 export default function ClientScripts() {
   return (
     <>
+      {/* Add Framer Motion Timing Fix - highest priority */}
+      <Script 
+        src="/framer-timing-fix.js"
+        strategy="beforeInteractive"
+        id="framer-timing-fix"
+      />
       {/* Add Require Polyfill - highest priority to prevent animation errors */}
       <Script 
         src="/require-polyfill.js"
