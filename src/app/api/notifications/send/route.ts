@@ -11,7 +11,7 @@ const apps = getApps();
 if (!apps.length) {
   try {
     // Check if we have service account credentials
-    if (process.env.PRIVATE_KEY) {
+    if (process.env.PRIVATE_KEY && process.env.PROJECT_ID && process.env.client_email) {
       // Use service account credentials from environment variables
       const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
       

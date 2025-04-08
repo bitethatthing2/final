@@ -39,6 +39,7 @@ export default function IOSInstructionsPage() {
                       width={500} 
                       height={300}
                       priority
+                      unoptimized
                       className="w-full h-auto object-contain"
                     />
                   </div>
@@ -63,6 +64,7 @@ export default function IOSInstructionsPage() {
                       width={500} 
                       height={300}
                       priority
+                      unoptimized
                       className="w-full h-auto object-contain"
                     />
                   </div>
@@ -88,6 +90,7 @@ export default function IOSInstructionsPage() {
                         alt="Menu Icon" 
                         width={24} 
                         height={24}
+                        unoptimized
                         className="w-6 h-6"
                       />
                       <span className="font-medium text-lg">&quot;Enable Notifications&quot;</span>
