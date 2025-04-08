@@ -5,9 +5,19 @@ import Script from "next/script";
 export default function ClientScripts() {
   return (
     <>
+      {/* Add Performance Timing Fix Script - must be first */}
+      <Script 
+        src="/performance-timing-fix.js"
+        strategy="beforeInteractive"
+      />
       {/* Add Elfsight Fix Script */}
       <Script 
         src="/elfsight-fix.js"
+        strategy="beforeInteractive"
+      />
+      {/* Add Elfsight Platform Fix Script */}
+      <Script 
+        src="/elfsight-platform-fix.js"
         strategy="beforeInteractive"
       />
       {/* Add Google Maps Fix Script */}
