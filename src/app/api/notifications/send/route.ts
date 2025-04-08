@@ -17,8 +17,8 @@ if (!apps.length) {
       
       initializeApp({
         credential: cert({
-          projectId: process.env.PROJECT_ID || "final-side",
-          clientEmail: process.env.client_email || "firebase-adminsdk-fbsvc@final-side.iam.gserviceaccount.com",
+          projectId: process.env.PROJECT_ID,
+          clientEmail: process.env.client_email,
           privateKey: privateKey,
           clientId: process.env.client_id,
           privateKeyId: process.env.PRIVATE_KEY_ID,
@@ -26,9 +26,9 @@ if (!apps.length) {
           tokenUri: process.env.token_uri,
           authProviderX509CertUrl: process.env.auth_provider_x509_cert_url,
           clientX509CertUrl: process.env.client_x509_cert_url,
-          universeDomain: process.env.universe_domain || "googleapis.com"
+          universeDomain: process.env.universe_domain
         }),
-        storageBucket: process.env.STORAGE_BUCKET || "final-side.firebasestorage.app",
+        storageBucket: process.env.STORAGE_BUCKET,
       });
       console.log("Firebase Admin initialized with environment variables");
     } else {
@@ -37,7 +37,7 @@ if (!apps.length) {
         const serviceAccount = require("../../../../service_account.json");
         initializeApp({
           credential: cert(serviceAccount),
-          storageBucket: process.env.STORAGE_BUCKET || "final-side.firebasestorage.app",
+          storageBucket: process.env.STORAGE_BUCKET,
         });
         console.log("Firebase Admin initialized with service account file");
       } catch (fileError) {
