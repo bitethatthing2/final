@@ -17,6 +17,7 @@ const GoogleMapEmbed: React.FC<GoogleMapEmbedProps> = ({
   className
 }) => {
   // Create a Google Maps embed URL that works without an API key
+  // Using a more browser-friendly format with no Node.js dependencies
   const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3383.727!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2sus!4v1615!5m2!1sen!2sus`;
 
   return (

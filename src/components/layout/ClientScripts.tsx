@@ -5,6 +5,12 @@ import Script from "next/script";
 export default function ClientScripts() {
   return (
     <>
+      {/* Add Require Polyfill - highest priority to prevent animation errors */}
+      <Script 
+        src="/require-polyfill.js"
+        strategy="beforeInteractive"
+        id="require-polyfill"
+      />
       {/* Add Direct Animation Fix Script - highest priority */}
       <Script 
         src="/direct-animation-fix.js"
