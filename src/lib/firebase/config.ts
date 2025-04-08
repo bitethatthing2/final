@@ -11,9 +11,12 @@ export const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
+// Define the type for our config keys
+type FirebaseConfigKey = keyof typeof firebaseConfig;
+
 // Basic validation to ensure config values are present (optional but helpful)
 export function validateFirebaseConfig() {
-  const requiredFields = [
+  const requiredFields: FirebaseConfigKey[] = [
     'apiKey',
     'authDomain',
     'projectId',
