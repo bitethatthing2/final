@@ -1,7 +1,10 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import Script from 'next/script';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the Script component to prevent static rendering issues
+const Script = dynamic(() => import('next/script'), { ssr: false });
 
 interface ElfsightWidgetProps {
   widgetId: string;
@@ -13,25 +16,27 @@ const ElfsightWidget = ({ widgetId, className = '' }: ElfsightWidgetProps) => {
   const widgetClass = `elfsight-app-${widgetId}`;
 
   useEffect(() => {
-    // This will trigger the Elfsight widget to load if the script is already loaded
-    if (window.elfsight) {
-      window.elfsight.reinit();
-    }
+    // Load the Elfsight script manually in useEffect to avoid SSR issues
+    const script = document.createElement('script');
+    script.src = "https://static.elfsight.com/platform/platform.js";
+    script.async = true;
+    script.onload = () => {
+      if (window.elfsight) {
+        window.elfsight.reinit();
+      }
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      // Clean up the script when component unmounts
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
   }, [widgetId]);
 
   return (
-    <>
-      <Script
-        src="https://static.elfsight.com/platform/platform.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          if (window.elfsight) {
-            window.elfsight.reinit();
-          }
-        }}
-      />
-      <div ref={containerRef} className={`${widgetClass} ${className}`}></div>
-    </>
+    <div ref={containerRef} className={`${widgetClass} ${className}`}></div>
   );
 };
 
