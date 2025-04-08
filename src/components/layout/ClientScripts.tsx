@@ -5,7 +5,12 @@ import Script from "next/script";
 export default function ClientScripts() {
   return (
     <>
-      {/* Add Performance Timing Fix Script - must be first */}
+      {/* Add Animation Frame Fix Script - must be first */}
+      <Script 
+        src="/animation-frame-fix.js"
+        strategy="beforeInteractive"
+      />
+      {/* Add Performance Timing Fix Script */}
       <Script 
         src="/performance-timing-fix.js"
         strategy="beforeInteractive"
