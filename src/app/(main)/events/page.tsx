@@ -10,6 +10,13 @@ interface Event {
 
 const events: Event[] = [
   {
+    title: "Side Hustle Summer Jam 2025",
+    date: "July 25, 2025",
+    time: "6:00 PM - 11:00 PM",
+    description: "Tickets on sale soon. Artist lineup to be announced soon!",
+    image: "/hustle_jam_event.png"
+  },
+  {
     title: "Live Music Night",
     date: "April 15, 2025",
     time: "7:00 PM - 10:00 PM",
