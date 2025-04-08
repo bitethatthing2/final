@@ -52,7 +52,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    unoptimized: true, // Required for static export
     dangerouslyAllowSVG: true,
     remotePatterns: [
       {
