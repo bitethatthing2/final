@@ -11,20 +11,21 @@ interface LocationSwitcherProps {
 }
 
 export function LocationSwitcher({ className }: LocationSwitcherProps) {
-  const { resolvedTheme, setTheme } = useTheme()
+  const { resolvedTheme, theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const { selectedLocation, setSelectedLocation } = useLocation()
   
   // Ensure component is mounted before accessing theme
   useEffect(() => {
     setMounted(true)
+    
+    // Sync theme with location on initial load
+    if (selectedLocation === 'portland' && theme !== 'dark') {
+      setTheme('dark')
+    } else if (selectedLocation === 'salem' && theme !== 'light') {
+      setTheme('light')
+    }
   }, [])
-  
-  // Different wolf images for each location
-  const locationImages = {
-    portland: '/wolf-light-white.png',
-    salem: '/wolf-icon-black.png'
-  }
   
   // If not mounted yet, return a placeholder to prevent layout shift
   if (!mounted) {
@@ -37,8 +38,17 @@ export function LocationSwitcher({ className }: LocationSwitcherProps) {
     </div>
   }
   
-  // Get current image based on location
-  const currentImage = locationImages[selectedLocation]
+  // Get current image based on both location and theme
+  const isDarkMode = theme === 'dark' || resolvedTheme === 'dark'
+  
+  let currentImage: string;
+  if (selectedLocation === 'portland') {
+    // Portland always uses white wolf (dark theme)
+    currentImage = '/wolf-light-white.png';
+  } else {
+    // Salem uses black wolf for light theme, white wolf for dark theme
+    currentImage = isDarkMode ? '/wolf-light-white.png' : '/wolf-icon-black.png';
+  }
   
   const toggleLocation = () => {
     const newLocation = selectedLocation === 'portland' ? 'salem' : 'portland'

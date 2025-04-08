@@ -1,5 +1,5 @@
-import PageHeader from "@/components/layout/PageHeader";
 import DynamicFooter from "@/components/layout/DynamicFooter";
+import { Header } from "@/components/header";
 
 export default function MainLayout({
   children,
@@ -8,7 +8,7 @@ export default function MainLayout({
 }) {
   return (
     <>
-      <PageHeader title="Hustle Hard" />
+      <Header />
       <main className="flex-grow">
         {children}
       </main>
