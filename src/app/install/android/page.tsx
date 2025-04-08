@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -40,6 +38,7 @@ export default function AndroidInstructionsPage() {
                     width={300} 
                     height={600}
                     priority
+                    unoptimized
                     className="w-full h-auto object-contain"
                   />
                 </div>

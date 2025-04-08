@@ -1,5 +1,3 @@
-'use client';
-
 import { menuData } from '@/lib/menu-data';
 import { MenuItem } from '@/components/features/menu/menu-item';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

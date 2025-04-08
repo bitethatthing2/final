@@ -1,8 +1,6 @@
-'use client';
-
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function AndroidInstructionsPage() {
   return (
@@ -40,6 +38,7 @@ export default function AndroidInstructionsPage() {
                     width={300} 
                     height={600}
                     priority
+                    unoptimized
                     className="w-full h-auto object-contain"
                   />
                 </div>
@@ -51,7 +50,7 @@ export default function AndroidInstructionsPage() {
               <div className="space-y-2 text-white/90">
                 <p>1. When prompted, tap &quot;Allow&quot; for notifications</p>
                 <p>2. Open your device Settings</p>
-                <p>3. Go to Apps &gt; Side Hustle Bar &gt; Notifications</p>
+                <p>3. Go to Apps {`>`} Side Hustle Bar {`>`} Notifications</p>
                 <p>4. Enable all notification options</p>
               </div>
             </section>
@@ -74,11 +73,7 @@ export default function AndroidInstructionsPage() {
                 </Link>
                 .
               </p>
-              <p className="text-sm mt-2">
-                Note: Installation steps might vary slightly depending on your Android
-                version and browser. If you don't see an install option, ensure
-                you're using a compatible browser like Chrome or Firefox.
-              </p>
+              {/* Note: Moved this common note to the parent install page */}
             </div>
           </div>
         </div>

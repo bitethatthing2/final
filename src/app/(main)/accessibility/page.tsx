@@ -1,6 +1,5 @@
-'use client';
-
 import { BackButton } from "@/components/ui/back-button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 export default function AccessibilityPage() {
   return (

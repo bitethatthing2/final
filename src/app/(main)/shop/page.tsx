@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
@@ -65,6 +63,7 @@ export default function ShopPage() {
                     src={product.image}
                     alt={product.name}
                     fill
+                    unoptimized
                     className="object-cover"
                   />
                 </div>
