@@ -5,6 +5,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/contexts/theme-context"; // Corrected import path
 import { LocationProvider } from "@/contexts/LocationContext"; // Import LocationProvider
+import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -51,7 +52,8 @@ export default function RootLayout({
         >
           {/* Wrap children with LocationProvider */}
           <LocationProvider>
-            {children} 
+            {children}
+            <Toaster />
           </LocationProvider>
         </ThemeProvider>
         {/* Add Elfsight Platform Script */}

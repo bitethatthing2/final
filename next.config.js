@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
+  register: true,
+  skipWaiting: true,
+});
+
 const nextConfig = {
   reactStrictMode: true,
   eslint: {
@@ -42,9 +49,29 @@ const nextConfig = {
   trailingSlash: true,
   // Add webpack configuration if needed
   webpack(config, { isServer }) {
-    // Add any webpack configurations here
+    // Inject Firebase config into service worker
+    if (!isServer) {
+      // Create a stringified version of the Firebase config for injection
+      const firebaseConfig = {
+        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+        measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+      };
+
+      // Add a plugin to inject the Firebase config into the service worker
+      config.plugins.push(
+        new config.webpack.DefinePlugin({
+          'self.__FIREBASE_CONFIG__': JSON.stringify(firebaseConfig),
+        })
+      );
+    }
+    
     return config;
   }
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);
