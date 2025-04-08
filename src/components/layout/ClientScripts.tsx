@@ -5,6 +5,12 @@ import Script from "next/script";
 export default function ClientScripts() {
   return (
     <>
+      {/* Add Google Maps Timing Fix Script - highest priority */}
+      <Script 
+        src="/google-maps-timing-fix.js"
+        strategy="beforeInteractive"
+        id="google-maps-timing-fix"
+      />
       {/* Add Direct Animation Fix Script - highest priority */}
       <Script 
         src="/direct-animation-fix.js"

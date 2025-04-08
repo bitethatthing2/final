@@ -14,7 +14,10 @@ export function middleware(request: NextRequest) {
     font-src 'self' data: https://fonts.gstatic.com https://*.elfsight.com https://*.elfsightcdn.com;
     media-src 'self' https://video.wixstatic.com https://*.elfsight.com https://*.elfsightcdn.com blob:;
     connect-src 'self' https://*.elfsight.com https://widget-data.service.elfsight.com https://*.service.elfsight.com https://*.googleapis.com https://*.instagram.com https://*.gstatic.com https://*.firebase.googleapis.com https://lh3.googleusercontent.com https://scontent.cdninstagram.com https://core.service.elfsight.com https://maps.googleapis.com https://www.google.com https://g.doubleclick.net https://accounts.google.com;
-    frame-src 'self' https://*.elfsight.com https://core.service.elfsight.com https://*.google.com https://g.doubleclick.net https://accounts.google.com https://www.gstatic.com https://maps.googleapis.com;
+    frame-src 'self' https://*.elfsight.com https://core.service.elfsight.com https://*.google.com https://g.doubleclick.net https://accounts.google.com https://www.gstatic.com https://maps.googleapis.com https://www.google.com/maps/;
+    worker-src 'self' blob:;
+    child-src 'self' blob: https://*.google.com https://maps.googleapis.com;
+    frame-ancestors 'self' https://*.netlify.app https://*.magnificent-churros-3c51ed.netlify.app;
     object-src 'none';
     base-uri 'self';
   `.replace(/\s+/g, ' ').trim()
@@ -22,9 +25,14 @@ export function middleware(request: NextRequest) {
   // Set security headers
   response.headers.set('Content-Security-Policy', cspHeader)
   response.headers.set('X-Content-Type-Options', 'nosniff')
-  response.headers.set('X-Frame-Options', 'DENY')
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN')
   response.headers.set('X-XSS-Protection', '1; mode=block')
   response.headers.set('Referrer-Policy', 'no-referrer-when-downgrade')
+  
+  // Add Cross-Origin headers to help with iframe content
+  response.headers.set('Cross-Origin-Embedder-Policy', 'credentialless')
+  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin')
+  response.headers.set('Cross-Origin-Resource-Policy', 'cross-origin')
 
   return response
 }
