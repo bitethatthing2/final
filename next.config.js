@@ -12,7 +12,10 @@ const withPWA = require('@ducanh2912/next-pwa').default({
     disableDevLogs: true,
     // Exclude problematic files from precaching
     exclude: [
-      /_redirects/,
+      '_redirects',
+      '**/_redirects',
+      '/out/_redirects',
+      /\/_redirects$/,
       /\.map$/,
       /^manifest.*\.js$/,
       /\.DS_Store/,
