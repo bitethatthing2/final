@@ -14,28 +14,28 @@ const events: Event[] = [
     date: "July 25, 2025",
     time: "6:00 PM - 11:00 PM",
     description: "Tickets on sale soon. Artist lineup to be announced soon!",
-    image: "/hustle_jam_event.png"
+    image: "/img_placeholder_event_default.jpg"
   },
   {
     title: "Live Music Night",
     date: "April 15, 2025",
     time: "7:00 PM - 10:00 PM",
     description: "Join us for a night of live music featuring local artists. Food and drink specials all night!",
-    image: "/images/events/live-music.jpg"
+    image: "/img_placeholder_event_default.jpg"
   },
   {
     title: "Taco Tuesday Special",
     date: "Every Tuesday",
     time: "4:00 PM - 9:00 PM",
     description: "Get your fill with our famous street tacos at special prices. Different varieties each week!",
-    image: "/images/events/taco-tuesday.jpg"
+    image: "/img_placeholder_event_default.jpg"
   },
   {
     title: "Weekend Brunch",
     date: "Every Saturday & Sunday",
     time: "10:00 AM - 2:00 PM",
     description: "Start your weekend right with our special brunch menu featuring classic favorites and unique twists.",
-    image: "/images/events/weekend-brunch.jpg"
+    image: "/img_placeholder_event_default.jpg"
   }
 ];
 
