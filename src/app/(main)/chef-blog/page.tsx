@@ -97,6 +97,7 @@ export default function ChefBlogPage() {
                     src={post.image}
                     alt={post.title}
                     fill
+                    unoptimized
                     className="object-cover"
                   />
                 </div>
