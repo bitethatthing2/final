@@ -1,118 +1,37 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface GoogleMapEmbedProps {
-  src: string;
-  title: string;
+  lat: number;
+  lng: number;
+  zoom?: number;
   className?: string;
 }
 
 const GoogleMapEmbed: React.FC<GoogleMapEmbedProps> = ({
-  src,
-  title,
+  lat,
+  lng,
+  zoom = 15,
   className
 }) => {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [isInViewport, setIsInViewport] = useState(false);
-
-  // Ensure the src is properly formatted for Google Maps
-  const getSafeMapUrl = (url: string) => {
-    // Make sure the URL has the correct format and parameters
-    if (!url.includes('maps.google.com') && !url.includes('google.com/maps')) {
-      return url; // Return as is if not a Google Maps URL
-    }
-
-    // Add necessary parameters for better security and performance
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}output=embed&z=15`;
-  };
-
-  // Custom intersection observer for lazy loading (more compatible than loading="lazy")
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const options = {
-      root: null,
-      rootMargin: '200px', // Load when within 200px of viewport
-      threshold: 0
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setIsInViewport(true);
-          observer.disconnect(); // Stop observing once in viewport
-        }
-      });
-    }, options);
-
-    observer.observe(containerRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!iframeRef.current || !isInViewport) return;
-
-    const handleLoad = () => {
-      console.log('Google Maps iframe loaded successfully');
-      setIsLoaded(true);
-      setHasError(false);
-    };
-
-    const handleError = (e: Event) => {
-      console.error('Error loading Google Maps iframe:', e);
-      setHasError(true);
-      setIsLoaded(false);
-    };
-
-    // Add event listeners
-    const iframe = iframeRef.current;
-    iframe.addEventListener('load', handleLoad);
-    iframe.addEventListener('error', handleError);
-
-    // Clean up event listeners
-    return () => {
-      iframe.removeEventListener('load', handleLoad);
-      iframe.removeEventListener('error', handleError);
-    };
-  }, [isInViewport]);
+  // Create a Google Maps embed URL that works without an API key
+  const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3383.727!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2sus!4v1615!5m2!1sen!2sus`;
 
   return (
-    <div ref={containerRef} className="w-full rounded-lg overflow-hidden border border-white/10 shadow-md">
+    <div className="w-full rounded-lg overflow-hidden border border-white/10 shadow-md">
       {/* Maintain aspect ratio for responsiveness */}
       <div className="relative pb-[56.25%] h-0"> {/* 16:9 Aspect Ratio */}
-        {hasError ? (
-          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black/20 text-white">
-            <p>Unable to load map. Please try again later.</p>
-          </div>
-        ) : isInViewport ? (
-          <iframe
-            ref={iframeRef}
-            src={getSafeMapUrl(src)}
-            title={title}
-            width="100%"
-            height="100%"
-            allowFullScreen={true}
-            referrerPolicy="no-referrer-when-downgrade"
-            className={cn("absolute top-0 left-0 w-full h-full border-0", 
-              !isLoaded ? "opacity-0" : "opacity-100 transition-opacity duration-300",
-              className
-            )}
-            sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-          />
-        ) : (
-          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black/10 text-white">
-            <p>Loading map...</p>
-          </div>
-        )}
+        <iframe
+          src={mapUrl}
+          title="Google Maps"
+          width="100%"
+          height="100%"
+          allowFullScreen={true}
+          referrerPolicy="no-referrer-when-downgrade"
+          className={cn("absolute top-0 left-0 w-full h-full hh-iframe-no-border", className)}
+        />
       </div>
     </div>
   );

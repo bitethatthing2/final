@@ -153,8 +153,6 @@ export default function HomePage() {
           <>
             <PortlandMap 
               key={`home-portland-map-${mounted ? 'mounted' : 'loading'}`}
-              embedUrl={locationData.portland.embedUrl} 
-              title={locationData.portland.name} 
             />
             <div className="mt-4 flex justify-center">
               <LocationDirectionButtons location="portland" />
@@ -164,8 +162,6 @@ export default function HomePage() {
           <>
             <SalemMap 
               key={`home-salem-map-${mounted ? 'mounted' : 'loading'}`}
-              embedUrl={locationData.salem.embedUrl} 
-              title={locationData.salem.name} 
             />
             <div className="mt-4 flex justify-center">
               <LocationDirectionButtons location="salem" />

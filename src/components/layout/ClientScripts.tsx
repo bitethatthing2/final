@@ -5,12 +5,6 @@ import Script from "next/script";
 export default function ClientScripts() {
   return (
     <>
-      {/* Add Google Maps Timing Fix Script - highest priority */}
-      <Script 
-        src="/google-maps-timing-fix.js"
-        strategy="beforeInteractive"
-        id="google-maps-timing-fix"
-      />
       {/* Add Direct Animation Fix Script - highest priority */}
       <Script 
         src="/direct-animation-fix.js"
@@ -35,14 +29,6 @@ export default function ClientScripts() {
       <Script 
         src="/elfsight-platform-fix.js"
         strategy="beforeInteractive"
-      />
-      {/* Add Google Maps Fix Script */}
-      <Script 
-        src="/google-maps-fix.js"
-        strategy="afterInteractive"
-        onError={() => {
-          console.error('Failed to load Google Maps fix script');
-        }}
       />
       {/* Add Elfsight Platform Script */}
       <Script 

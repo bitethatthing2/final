@@ -5,36 +5,47 @@
  */
 
 (function() {
-  // Store original performance.now and requestAnimationFrame
-  const originalPerformanceNow = window.performance && window.performance.now 
+  // Prevent multiple executions
+  if (window.__googleMapsTimingFixApplied) {
+    return;
+  }
+  window.__googleMapsTimingFixApplied = true;
+
+  // Store original methods without overriding them yet
+  const originalPerformanceNow = window.performance && typeof window.performance.now === 'function' 
     ? window.performance.now.bind(window.performance) 
-    : Date.now.bind(Date);
+    : null;
   
   const originalRAF = window.requestAnimationFrame;
   const originalCAF = window.cancelAnimationFrame;
 
-  // Create a backup timing mechanism
-  let timingOffset = Date.now();
+  // Create a backup timing mechanism that doesn't use performance.now
+  const timingOffset = Date.now();
   let lastTimestamp = 0;
 
-  // Safe performance.now implementation
-  const safePerformanceNow = function() {
-    try {
-      if (window.performance && window.performance.now) {
-        return window.performance.now();
-      }
-    } catch (e) {
-      console.warn('Error accessing performance.now, using fallback', e);
-    }
-    
-    // Fallback to Date.now with offset for consistent timing
+  // Safe performance.now implementation that doesn't cause recursion
+  const getTimestamp = function() {
+    // Use Date.now with offset for consistent timing
     return Date.now() - timingOffset;
   };
 
-  // Patch window.performance.now
-  if (window.performance) {
+  // Only patch if we're not already patched by another script
+  if (window.performance && !window.__performanceNowPatched) {
     try {
-      window.performance.now = safePerformanceNow;
+      window.__performanceNowPatched = true;
+      
+      // Replace performance.now with our safe version
+      window.performance.now = function() {
+        if (originalPerformanceNow) {
+          try {
+            return originalPerformanceNow();
+          } catch (e) {
+            // Fall back to our timestamp if original fails
+            return getTimestamp();
+          }
+        }
+        return getTimestamp();
+      };
     } catch (e) {
       console.warn('Could not patch performance.now', e);
     }
@@ -48,7 +59,7 @@
         return originalRAF.call(window, function(timestamp) {
           // If timestamp is invalid, generate our own
           if (isNaN(timestamp) || timestamp === undefined) {
-            timestamp = safePerformanceNow();
+            timestamp = getTimestamp();
           }
           
           // Ensure timestamp is always increasing
@@ -66,7 +77,7 @@
     
     // Fallback to setTimeout
     return window.setTimeout(function() {
-      const timestamp = safePerformanceNow();
+      const timestamp = getTimestamp();
       lastTimestamp = timestamp;
       callback(timestamp);
     }, 1000/60);
@@ -86,12 +97,15 @@
     return window.clearTimeout(id);
   };
 
-  // Patch requestAnimationFrame and cancelAnimationFrame
-  try {
-    window.requestAnimationFrame = safeRequestAnimationFrame;
-    window.cancelAnimationFrame = safeCancelAnimationFrame;
-  } catch (e) {
-    console.warn('Could not patch animation frame methods', e);
+  // Only patch if not already patched
+  if (!window.__animationFramePatched) {
+    try {
+      window.__animationFramePatched = true;
+      window.requestAnimationFrame = safeRequestAnimationFrame;
+      window.cancelAnimationFrame = safeCancelAnimationFrame;
+    } catch (e) {
+      console.warn('Could not patch animation frame methods', e);
+    }
   }
 
   // Patch useManualTiming error directly
@@ -101,13 +115,13 @@
       // Check for Google Maps API
       if (window.google && window.google.maps) {
         // If the internal _useManualTiming property exists, ensure it's properly set
-        if (window.google.maps.hasOwnProperty('_useManualTiming')) {
+        if ('_useManualTiming' in window.google.maps) {
           window.google.maps._useManualTiming = false;
         }
         
         // Patch the internal timing function if it exists
         if (typeof window.google.maps.internal === 'object' && 
-            window.google.maps.internal.hasOwnProperty('useManualTiming')) {
+            'useManualTiming' in window.google.maps.internal) {
           window.google.maps.internal.useManualTiming = false;
         }
       }
@@ -118,9 +132,11 @@
 
   // Run the patch when Google Maps API loads
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    patchUseManualTiming();
+    setTimeout(patchUseManualTiming, 0);
   } else {
-    window.addEventListener('load', patchUseManualTiming);
+    window.addEventListener('load', function() {
+      setTimeout(patchUseManualTiming, 0);
+    });
   }
 
   // Also try to patch when Google Maps script loads
@@ -150,25 +166,21 @@
     const iframes = document.querySelectorAll('iframe[src*="google.com/maps"]');
     
     iframes.forEach(function(iframe) {
-      // Ensure proper attributes are set
-      if (!iframe.hasAttribute('loading')) {
-        iframe.setAttribute('loading', 'lazy');
-      }
-      
-      if (!iframe.hasAttribute('referrerpolicy')) {
-        iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
-      }
-      
       // Add sandbox attribute with necessary permissions
       if (!iframe.hasAttribute('sandbox')) {
         iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox');
+      }
+      
+      // Ensure proper referrer policy
+      if (!iframe.hasAttribute('referrerpolicy')) {
+        iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
       }
     });
   };
 
   // Fix iframes when DOM is ready and after any potential dynamic insertions
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    fixIframeLoading();
+    setTimeout(fixIframeLoading, 0);
   } else {
     window.addEventListener('DOMContentLoaded', fixIframeLoading);
   }
@@ -176,5 +188,5 @@
   // Also run periodically to catch dynamically added iframes
   setInterval(fixIframeLoading, 2000);
 
-  console.log('Google Maps timing fix applied');
+  console.log('Google Maps timing fix applied safely');
 })();

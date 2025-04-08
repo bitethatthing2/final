@@ -4,15 +4,20 @@ import React from 'react';
 import GoogleMapEmbed from './GoogleMapEmbed';
 
 interface PortlandMapProps {
-  embedUrl: string;
-  title: string;
+  embedUrl?: string; // Keep for backwards compatibility
+  title?: string;    // Keep for backwards compatibility
 }
 
-const PortlandMap: React.FC<PortlandMapProps> = ({ embedUrl, title }) => {
+// Portland coordinates for The Side Hustle Bar
+const PORTLAND_LAT = 45.5184767;
+const PORTLAND_LNG = -122.6794497;
+
+const PortlandMap: React.FC<PortlandMapProps> = () => {
   return (
     <GoogleMapEmbed
-      src={embedUrl}
-      title={title}
+      lat={PORTLAND_LAT}
+      lng={PORTLAND_LNG}
+      zoom={15}
     />
   );
 };
