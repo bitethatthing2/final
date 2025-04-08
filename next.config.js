@@ -1,50 +1,50 @@
 /** @type {import('next').NextConfig} */
-// const withPWA = require('@ducanh2912/next-pwa').default({
-//   dest: 'public',
-//   disable: process.env.NODE_ENV === 'development',
-//   register: true,
-//   skipWaiting: true,
-//   cacheOnFrontEndNav: true,
-//   aggressiveFrontEndNavCaching: true,
-//   reloadOnOnline: true,
-//   swcMinify: true,
-//   workboxOptions: {
-//     disableDevLogs: true,
-//     // Exclude problematic files from precaching
-//     exclude: [
-//       /_redirects/,
-//       /\.map$/,
-//       /^manifest.*\.js$/,
-//       /\.DS_Store/,
-//       /\.git/
-//     ],
-//     // Define custom runtime caching rules similar to your previous project
-//     runtimeCaching: [
-//       {
-//         urlPattern: /^https:\/\/magnificent-churros-3c51ed\.netlify\.app\/.*$/,
-//         handler: 'NetworkFirst',
-//         options: {
-//           cacheName: 'app-cache',
-//           expiration: {
-//             maxEntries: 200,
-//             maxAgeSeconds: 86400 // 1 day
-//           }
-//         }
-//       },
-//       {
-//         urlPattern: /\.(png|jpg|jpeg|svg|gif|ico)$/,
-//         handler: 'CacheFirst',
-//         options: {
-//           cacheName: 'image-cache',
-//           expiration: {
-//             maxEntries: 50,
-//             maxAgeSeconds: 604800 // 1 week
-//           }
-//         }
-//       }
-//     ]
-//   },
-// });
+const withPWA = require('@ducanh2912/next-pwa').default({
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
+  register: true,
+  skipWaiting: true,
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+  swcMinify: true,
+  workboxOptions: {
+    disableDevLogs: true,
+    // Exclude problematic files from precaching
+    exclude: [
+      /_redirects/,
+      /\.map$/,
+      /^manifest.*\.js$/,
+      /\.DS_Store/,
+      /\.git/
+    ],
+    // Define custom runtime caching rules similar to your previous project
+    runtimeCaching: [
+      {
+        urlPattern: /^https:\/\/magnificent-churros-3c51ed\.netlify\.app\/.*$/,
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'app-cache',
+          expiration: {
+            maxEntries: 200,
+            maxAgeSeconds: 86400 // 1 day
+          }
+        }
+      },
+      {
+        urlPattern: /\.(png|jpg|jpeg|svg|gif|ico)$/,
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'image-cache',
+          expiration: {
+            maxEntries: 50,
+            maxAgeSeconds: 604800 // 1 week
+          }
+        }
+      }
+    ]
+  },
+});
 
 const nextConfig = {
   reactStrictMode: true,
@@ -103,13 +103,11 @@ const nextConfig = {
       };
 
       // Add a plugin to inject the Firebase config into the service worker
-      // NOTE: This might cause issues if the PWA plugin is disabled, as it targets the service worker
-      // Commenting this out as well for now.
-      // config.plugins.push(
-      //   new webpack.DefinePlugin({
-      //     'self.__FIREBASE_CONFIG__': JSON.stringify(firebaseConfig),
-      //   })
-      // );
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          'self.__FIREBASE_CONFIG__': JSON.stringify(firebaseConfig),
+        })
+      );
     }
     
     return config;
@@ -118,5 +116,4 @@ const nextConfig = {
   output: 'export',
 };
 
-// module.exports = withPWA(nextConfig);
-module.exports = nextConfig; // Export the raw config
+module.exports = withPWA(nextConfig);

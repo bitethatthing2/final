@@ -25,7 +25,7 @@ const GoogleMapEmbed: React.FC<GoogleMapEmbedProps> = ({
           height="100%"
           allowFullScreen={true}
           referrerPolicy="no-referrer-when-downgrade"
-          className={cn("absolute top-0 left-0 w-full h-full hh-iframe-no-border", className)}
+          className={cn("absolute top-0 left-0 w-full h-full border-0", className)}
         />
       </div>
     </div>
