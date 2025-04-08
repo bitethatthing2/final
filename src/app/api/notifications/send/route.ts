@@ -20,30 +20,14 @@ if (!apps.length) {
           projectId: process.env.PROJECT_ID,
           clientEmail: process.env.client_email,
           privateKey: privateKey,
-          clientId: process.env.client_id,
           privateKeyId: process.env.PRIVATE_KEY_ID,
-          authUri: process.env.auth_uri,
-          tokenUri: process.env.token_uri,
-          authProviderX509CertUrl: process.env.auth_provider_x509_cert_url,
-          clientX509CertUrl: process.env.client_x509_cert_url,
-          universeDomain: process.env.universe_domain
         }),
         storageBucket: process.env.STORAGE_BUCKET,
       });
       console.log("Firebase Admin initialized with environment variables");
     } else {
-      // Try to use service account file if environment variables aren't available
-      try {
-        const serviceAccount = require("../../../../service_account.json");
-        initializeApp({
-          credential: cert(serviceAccount),
-          storageBucket: process.env.STORAGE_BUCKET,
-        });
-        console.log("Firebase Admin initialized with service account file");
-      } catch (fileError) {
-        console.error("Could not load service account file:", fileError);
-        throw new Error("Firebase Admin SDK credentials not available");
-      }
+      console.error("Firebase Admin SDK credentials not available");
+      console.log("Please set the required environment variables: PRIVATE_KEY, PROJECT_ID, client_email");
     }
   } catch (error) {
     console.error("Firebase Admin initialization error:", error);
